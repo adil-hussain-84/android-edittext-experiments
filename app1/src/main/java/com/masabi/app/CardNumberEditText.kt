@@ -9,6 +9,12 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.core.widget.addTextChangedListener
 
+/**
+ * A custom view for users to enter payment card numbers into.
+ *
+ * This view looks like an [EditText] but formats the text entered into it by the user
+ * such that a space is shown after every fourth digit.
+ */
 class CardNumberEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet?,
@@ -17,6 +23,10 @@ class CardNumberEditText @JvmOverloads constructor(
 
     private val editText = EditText(context, attrs)
 
+    /**
+     * The digits entered into the view by the user
+     * (i.e. without the spaces that the view may have added to itself automatically for display purposes).
+     */
     val cardNumber: String
         get() = editText.text.toString().replace(" ", "")
 
@@ -40,6 +50,9 @@ class CardNumberEditText @JvmOverloads constructor(
         addView(editText)
     }
 
+    /**
+     * Formats the text in this view (represented by `editable`) so that a space is added after every fourth digit.
+     */
     private fun afterTextChanged(editable: Editable?) {
         if (editable == null) {
             return
