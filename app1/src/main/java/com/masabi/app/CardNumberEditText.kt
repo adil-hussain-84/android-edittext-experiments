@@ -61,10 +61,23 @@ class CardNumberEditText @JvmOverloads constructor(
         val text = editable.toString()
 
         val formattedText = text.replace(" ", "").chunked(4).joinToString(" ")
+        val formattedTextLength = formattedText.length
+
+        val selectionStart = editText.selectionStart
 
         if (text != formattedText) {
             editText.setText(formattedText)
-            editText.setSelection(editText.length())
+
+            if (selectionStart > formattedTextLength) {
+                // put the cursor at the end of the text to prevent an index out of bounds exception
+                editText.setSelection(formattedTextLength)
+            } else if (formattedText[selectionStart - 1] == ' ') {
+                // move the cursor one position forward to accommodate for the space that's just been inserted by the 'editText.setText' call
+                editText.setSelection(selectionStart + 1)
+            } else {
+                // keep the cursor where it was prior to the 'editText.setText' call
+                editText.setSelection(selectionStart)
+            }
         }
     }
 }
