@@ -2,7 +2,9 @@ package com.masabi.app
 
 import android.content.Context
 import android.text.Editable
+import android.text.InputFilter
 import android.text.InputType
+import android.text.Spanned
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.EditText
@@ -41,6 +43,7 @@ class CardNumberEditText @JvmOverloads constructor(
             ViewGroup.LayoutParams.MATCH_PARENT
         )
 
+        editText.filters = arrayOf(LengthFilter(16))
         editText.inputType = InputType.TYPE_CLASS_NUMBER
         editText.minLines = 1
         editText.maxLines = 1
@@ -77,6 +80,32 @@ class CardNumberEditText @JvmOverloads constructor(
             } else {
                 // keep the cursor where it was prior to the 'editText.setText' call
                 editText.setSelection(selectionStart)
+            }
+        }
+    }
+
+    private class LengthFilter(private val maxLength: Int) : InputFilter {
+
+        override fun filter(
+            source: CharSequence,
+            start: Int,
+            end: Int,
+            dest: Spanned,
+            dstart: Int,
+            dend: Int
+        ): CharSequence? {
+            val charactersToKeep = dest.substring(0, dstart) + dest.substring(dend, dest.length)
+            val charactersToAdd = source.substring(start, end)
+
+            val numberOfDigitsInCharactersToKeep = charactersToKeep.replace(" ", "").length
+            val numberOfDigitsInCharactersToAdd = charactersToAdd.replace(" ", "").length
+
+            val numberOfDigitsIfChangeIsAccepted = numberOfDigitsInCharactersToKeep + numberOfDigitsInCharactersToAdd
+
+            return if (numberOfDigitsIfChangeIsAccepted <= maxLength) {
+                null // accept the change
+            } else {
+                return dest.subSequence(dstart, dend) // reject the change; keep whatever characters were there already
             }
         }
     }
