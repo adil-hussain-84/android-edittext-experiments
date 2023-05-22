@@ -25,10 +25,10 @@ class MainActivity : AppCompatActivity() {
     private fun showCardNumber() {
         val cardNumber = cardNumberEditText.cardNumber
 
-        val message = if (cardNumber.isEmpty()) {
-            "You have not entered a card number."
-        } else {
+        val message = if (cardNumber.isNotEmpty()) {
             "Your card number without spaces is $cardNumber."
+        } else {
+            "You have not entered a card number."
         }
 
         AlertDialog.Builder(this)
