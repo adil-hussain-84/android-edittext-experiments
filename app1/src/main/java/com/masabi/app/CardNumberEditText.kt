@@ -15,7 +15,8 @@ import androidx.core.widget.addTextChangedListener
  * A custom view for users to enter payment card numbers into.
  *
  * This view looks like an [EditText] but formats the text entered into it by the user
- * such that a space is shown after every fourth digit.
+ * such that a space is shown after every fourth digit
+ * and the input is limited to a certain number of digits.
  */
 class CardNumberEditText @JvmOverloads constructor(
     context: Context,
@@ -43,7 +44,9 @@ class CardNumberEditText @JvmOverloads constructor(
             ViewGroup.LayoutParams.MATCH_PARENT
         )
 
+        // some card numbers can be up to 19 digits but let's gloss over that as an unimportant implementation detail
         editText.filters = arrayOf(LengthFilter(16))
+
         editText.inputType = InputType.TYPE_CLASS_NUMBER
         editText.minLines = 1
         editText.maxLines = 1
@@ -63,7 +66,7 @@ class CardNumberEditText @JvmOverloads constructor(
 
         val text = editable.toString()
 
-        val formattedText = text.replace(" ", "").chunked(4).joinToString(" ")
+        val formattedText = formatCardNumber(text)
         val formattedTextLength = formattedText.length
 
         val selectionStart = editText.selectionStart
@@ -84,6 +87,25 @@ class CardNumberEditText @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Formats `cardNumber` such that a space is inserted after every fourth digit.
+     *
+     * Formatting a card number is actually more complicated than inserting a space after every fourth digit.
+     * This function glosses over this detail because that's not the focus of this [CardNumberEditText] class.
+     * The focus of this [CardNumberEditText] class is the [afterTextChanged] function
+     * and how to adjust the cursor in the [EditText] whenever a space is added or removed by the format function.
+     */
+    private fun formatCardNumber(cardNumber: String): String {
+        return cardNumber.replace(" ", "").chunked(4).joinToString(" ")
+    }
+
+    /**
+     * This filter will constrain edits so that the length of the text in the [EditText] never exceeds the specified length.
+     *
+     * It excludes spaces from the length count such that "1234 5678" is treated as 8 characters and not 9 characters.
+     *
+     * @property maxLength The maximum number of characters to allow excluding spaces.
+     */
     private class LengthFilter(private val maxLength: Int) : InputFilter {
 
         override fun filter(
