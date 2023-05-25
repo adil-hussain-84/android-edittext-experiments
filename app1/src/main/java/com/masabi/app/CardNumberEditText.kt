@@ -71,19 +71,29 @@ class CardNumberEditText @JvmOverloads constructor(
 
         val selectionStart = editText.selectionStart
 
-        if (text != formattedText) {
-            editText.setText(formattedText)
+        if (text == formattedText) {
+            // nothing do; keep the text as it is
+            return
+        }
 
-            if (selectionStart > formattedTextLength) {
-                // put the cursor at the end of the text to prevent an index out of bounds exception
-                editText.setSelection(formattedTextLength)
-            } else if (formattedText[selectionStart - 1] == ' ') {
-                // move the cursor one position forward to accommodate for the space that's just been inserted by the 'editText.setText' call
-                editText.setSelection(selectionStart + 1)
-            } else {
-                // keep the cursor where it was prior to the 'editText.setText' call
-                editText.setSelection(selectionStart)
-            }
+        editText.setText(formattedText)
+
+        if (selectionStart > formattedTextLength) {
+            // put the cursor at the end of the text to prevent an index out of bounds exception
+            editText.setSelection(formattedTextLength)
+            return
+        }
+
+        val numberOfSpacesBeforeCursorInOriginalText = text.subSequence(0, selectionStart).count { it == ' ' }
+        val numberOfSpacesBeforeCursorInFormattedText = formattedText.subSequence(0, selectionStart).count { it == ' ' }
+
+        if (numberOfSpacesBeforeCursorInFormattedText > numberOfSpacesBeforeCursorInOriginalText) {
+            // move the cursor forward to accommodate for the space that's just been inserted by the 'editText.setText' call above
+            val diff = numberOfSpacesBeforeCursorInFormattedText - numberOfSpacesBeforeCursorInOriginalText
+            editText.setSelection(selectionStart + diff)
+        } else {
+            // keep the cursor where it was prior to the 'editText.setText' call
+            editText.setSelection(selectionStart)
         }
     }
 
