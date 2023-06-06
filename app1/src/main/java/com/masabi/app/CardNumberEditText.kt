@@ -69,12 +69,12 @@ class CardNumberEditText @JvmOverloads constructor(
         val formattedText = formatCardNumber(text)
         val formattedTextLength = formattedText.length
 
-        val selectionStart = editText.selectionStart
-
         if (text == formattedText) {
             // nothing do; keep the text as it is
             return
         }
+
+        val selectionStart = editText.selectionStart
 
         editText.setText(formattedText)
 
@@ -84,11 +84,11 @@ class CardNumberEditText @JvmOverloads constructor(
             return
         }
 
-        val numberOfSpacesBeforeCursorInOriginalText = text.subSequence(0, selectionStart).count { it == ' ' }
-        val numberOfSpacesBeforeCursorInFormattedText = formattedText.subSequence(0, selectionStart).count { it == ' ' }
+        val numberOfSpacesBeforeCursorInOriginalText = text.take(selectionStart).count { it == ' ' }
+        val numberOfSpacesBeforeCursorInFormattedText = formattedText.take(selectionStart).count { it == ' ' }
 
         if (numberOfSpacesBeforeCursorInFormattedText > numberOfSpacesBeforeCursorInOriginalText) {
-            // move the cursor forward to accommodate for the space that's just been inserted by the 'editText.setText' call above
+            // move the cursor forward to accommodate for the spaces that have just been inserted by the 'editText.setText' call above
             val diff = numberOfSpacesBeforeCursorInFormattedText - numberOfSpacesBeforeCursorInOriginalText
             editText.setSelection(selectionStart + diff)
         } else {
