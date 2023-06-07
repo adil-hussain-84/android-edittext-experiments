@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "android-edittext-experiments"
+rootProject.name = 'android-edittext-experiments'
 include ':app1'

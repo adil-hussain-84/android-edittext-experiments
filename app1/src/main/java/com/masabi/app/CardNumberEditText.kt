@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.core.widget.addTextChangedListener
+import com.masabi.app.CursorPositionCalculator.calculateCursorPositionInFormattedText
 
 /**
  * A custom view for users to enter payment card numbers into.
@@ -65,36 +66,24 @@ class CardNumberEditText @JvmOverloads constructor(
         }
 
         val text = editable.toString()
+        val textWithoutSpaces = text.replace(" ", "")
 
-        val formattedText = formatCardNumber(text)
-        val formattedTextLength = formattedText.length
+        val formattedText = formatCardNumber(textWithoutSpaces)
 
         if (text == formattedText) {
             // nothing do; keep the text as it is
             return
         }
 
-        val selectionStart = editText.selectionStart
+        val cursorPositionBefore = editText.selectionStart
 
         editText.setText(formattedText)
 
-        if (selectionStart > formattedTextLength) {
-            // put the cursor at the end of the text to prevent an index out of bounds exception
-            editText.setSelection(formattedTextLength)
-            return
-        }
+        val originalTextUpToCursor = text.take(cursorPositionBefore)
 
-        val numberOfSpacesBeforeCursorInOriginalText = text.take(selectionStart).count { it == ' ' }
-        val numberOfSpacesBeforeCursorInFormattedText = formattedText.take(selectionStart).count { it == ' ' }
+        val cursorPositionAfter = calculateCursorPositionInFormattedText(formattedText, originalTextUpToCursor)
 
-        if (numberOfSpacesBeforeCursorInFormattedText > numberOfSpacesBeforeCursorInOriginalText) {
-            // move the cursor forward to accommodate for the spaces that have just been inserted by the 'editText.setText' call above
-            val diff = numberOfSpacesBeforeCursorInFormattedText - numberOfSpacesBeforeCursorInOriginalText
-            editText.setSelection(selectionStart + diff)
-        } else {
-            // keep the cursor where it was prior to the 'editText.setText' call
-            editText.setSelection(selectionStart)
-        }
+        editText.setSelection(cursorPositionAfter)
     }
 
     /**
