@@ -1,6 +1,6 @@
 package com.masabi.app
 
-import com.masabi.app.CursorPositionCalculator.calculateCursorPositionInFormattedText
+import com.masabi.app.CardNumberEditTextCursorPositionCalculator.calculateCursorPositionInFormattedText
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
-class CursorPositionCalculatorTest {
+class CardNumberEditTextCursorPositionCalculatorTest {
 
     @ParameterizedTest(name = "formattedText=\"{0}\"; originalTextUpToCursor=\"{1}\"")
     @MethodSource("argumentsForTest")

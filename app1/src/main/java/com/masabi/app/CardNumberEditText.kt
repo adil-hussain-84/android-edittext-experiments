@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.core.widget.addTextChangedListener
-import com.masabi.app.CursorPositionCalculator.calculateCursorPositionInFormattedText
+import com.masabi.app.CardNumberEditTextCursorPositionCalculator.calculateCursorPositionInFormattedText
 
 /**
  * A custom view for users to enter payment card numbers into.

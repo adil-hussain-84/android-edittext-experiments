@@ -1,6 +1,6 @@
 package com.masabi.app
 
-object CursorPositionCalculator {
+object CardNumberEditTextCursorPositionCalculator {
 
     /**
      * Calculates where the cursor should be placed within `formattedText` taking into account `originalTextUpToOldCursorPosition`.
