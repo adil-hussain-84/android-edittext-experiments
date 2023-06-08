@@ -11,6 +11,7 @@ object CardNumberEditTextCursorPositionCalculator {
      *
      * @param formattedText The formatted text which may have spaces in different places than the original (i.e. pre-formatted) text.
      * @param originalTextUpToOldCursorPosition The original (i.e. pre-formatted) text up to where the cursor was prior to formatting.
+     * @return The position (i.e. index) where the cursor should be placed within `formattedText`.
      */
     fun calculateCursorPositionInFormattedText(formattedText: String, originalTextUpToOldCursorPosition: String): Int {
         var indexInFormattedText = 0
