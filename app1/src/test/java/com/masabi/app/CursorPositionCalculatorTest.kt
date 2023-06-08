@@ -12,7 +12,7 @@ class CursorPositionCalculatorTest {
 
     @ParameterizedTest(name = "formattedText=\"{0}\"; originalTextUpToCursor=\"{1}\"")
     @MethodSource("argumentsForTest")
-    fun test(formattedText: String, originalTextUpToCursor: String, expected: Int) {
+    fun calculateCursorPositionInFormattedText(formattedText: String, originalTextUpToCursor: String, expected: Int) {
         // When.
         val actual = calculateCursorPositionInFormattedText(formattedText, originalTextUpToCursor)
 
