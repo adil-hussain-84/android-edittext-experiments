@@ -16,8 +16,7 @@ import com.masabi.app.CardNumberEditTextCursorPositionCalculator.calculateCursor
  * A custom view for users to enter payment card numbers into.
  *
  * This view looks like an [EditText] but formats the text entered into it by the user
- * such that a space is shown after every fourth digit
- * and the input is limited to a certain number of digits.
+ * such that a space is shown after every fourth digit and the input is limited to 16 digits.
  */
 class CardNumberEditText @JvmOverloads constructor(
     context: Context,
@@ -59,6 +58,9 @@ class CardNumberEditText @JvmOverloads constructor(
 
     /**
      * Formats the text in this view (represented by `editable`) so that a space is added after every fourth digit.
+     *
+     * This function takes care to move the cursor in [editText] forward or backward
+     * depending on how many spaces are added or removed to/from the text.
      */
     private fun afterTextChanged(editable: Editable?) {
         if (editable == null) {
